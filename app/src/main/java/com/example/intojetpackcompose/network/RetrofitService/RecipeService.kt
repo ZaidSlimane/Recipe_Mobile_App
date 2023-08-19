@@ -1,11 +1,7 @@
 package com.example.intojetpackcompose.network.RetrofitService
 
-import com.example.intojetpackcompose.BottomNavigationBar
-import com.example.intojetpackcompose.Constants
-import com.example.intojetpackcompose.Meal
 import com.example.intojetpackcompose.network.Response.RecipeSearchResponse
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

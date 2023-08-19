@@ -41,33 +41,28 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.intojetpackcompose.UI.MainScreenViewModel
 import com.example.intojetpackcompose.domain.model.Meal
 import com.example.intojetpackcompose.ViewModel.FirstAccessViewModel
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
 
-
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun recipeSecreen(){
+fun recipeSecreen(mainScreenViewModel: MainScreenViewModel = viewModel()){
 
-    val viewModel = viewModel(modelClass = FirstAccessViewModel::class.java)
-
-    val state by viewModel.state.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
-
+    val recipeUiState by mainScreenViewModel.mainScreenState.collectAsState()
 
 
     val color1 = Color(0xFFB5D5B6)
     val color2 = Color(0xDCF5F5F5)
 
-      //  val searchModel = viewModel.searchModel.collectAsState()
-        var res: String = ""
-        val cornerDegree = 50
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,10 +75,8 @@ fun recipeSecreen(){
 
                     )
                 )
-
         )
         {
-
 
             OutlinedTextField(value = "", onValueChange = {},
                 modifier = Modifier
@@ -131,14 +124,9 @@ fun recipeSecreen(){
                 modifier = Modifier.fillMaxWidth()
 
             ) {
-
-
-                items(state){
-                    recipes : RecipeDTO ->
-
+                items(recipeUiState.onLunchRecipeData){
+                    item ->  horizontalScrollableCards(recipes = item)
                 }
-
-
             }
 
 
@@ -314,7 +302,7 @@ fun pantryScreen(){
 
 
 @Composable
-fun horizontalScrollableCards(recipes: RecipeDTO) {
+fun horizontalScrollableCards(recipes: Meal) {
 
             Card(
                 elevation = CardDefaults.cardElevation(

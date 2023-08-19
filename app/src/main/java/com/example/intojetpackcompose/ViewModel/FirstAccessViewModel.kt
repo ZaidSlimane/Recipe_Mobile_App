@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModel
-import com.example.intojetpackcompose.API.RetrofitClient
 import com.example.intojetpackcompose.domain.model.Meal
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
 import com.example.intojetpackcompose.network.mdoel.RecipesRepo.repo
@@ -25,7 +24,6 @@ class FirstAccessViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    private val apiCall = RetrofitClient.apiService
 
     init{
         getRecipes()

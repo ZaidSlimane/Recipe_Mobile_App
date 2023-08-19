@@ -127,64 +127,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Log.d("STEP1","STEP1")
-            val service = Retrofit.Builder()
-                .baseUrl("https://food2fork.ca/api/")
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-                .build()
-                .create(RecipeService::class.java)
-
-
-            var result by remember { mutableStateOf(" recipe title") }
-
-
-
-            CoroutineScope(IO).launch {
-                try{
-
-                    withContext(Dispatchers.Main){
-                        makeToast("trying to connect")
-                    }
-                    Log.d("STEP2", "STEP2")
-                    val response = service.get(
-                        token = "Token 9c8b06d329136da358c2d00e76946b0111ce2c48",
-                        id=9
-                    )
-
-                    result = response.title
-                    withContext(Dispatchers.Main) {
-
-
-                        Log.d(
-                            "RECIPE",
-                          result
-                        )
-                    }
-
-                }
-                catch (e: Exception){
-                    e.printStackTrace()
-                    withContext(Dispatchers.Main){
-                        Log.e("API_ERROR", e.message ?: "Unknown Error")
-                    }
-
-
-                    withContext(Dispatchers.Main){
-                        makeToast(e.message.toString())
-                    }
-                }
-
-
-
-
 
                 //BottomNavigationBarView()
 
-
-
             }
-
-            showTextOnScreen(result = result)
 
         }
 
@@ -200,13 +146,8 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    suspend fun makeToast(toast : String){
-        withContext(Dispatchers.Main){
-            Toast.makeText(applicationContext, toast, Toast.LENGTH_LONG).show()
 
-        }
-    }
-}
+
 
 
 
