@@ -1,5 +1,7 @@
 package com.example.intojetpackcompose
 
+import android.annotation.SuppressLint
+import android.text.BoringLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -44,21 +47,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.intojetpackcompose.Repository.RecipeRepository
+import com.example.intojetpackcompose.Repository.RecipeRepositoryImpl
 import com.example.intojetpackcompose.UI.MainScreenViewModel
 import com.example.intojetpackcompose.domain.model.Meal
 import com.example.intojetpackcompose.ViewModel.FirstAccessViewModel
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 
+@SuppressLint("SuspiciousIndentation")
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun recipeSecreen(mainScreenViewModel: MainScreenViewModel = viewModel()){
+
+fun recipeSecreen(mainScreenViewModel: MainScreenViewModel = hiltViewModel()){
 
     val recipeUiState by mainScreenViewModel.mainScreenState.collectAsState()
-
 
     val color1 = Color(0xFFB5D5B6)
     val color2 = Color(0xDCF5F5F5)
@@ -113,196 +123,31 @@ fun recipeSecreen(mainScreenViewModel: MainScreenViewModel = viewModel()){
                         )
                     }
                 }
-
             )
 
 
 
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
 
-                modifier = Modifier.fillMaxWidth()
+            dishyAnimation()
 
-            ) {
-                items(recipeUiState.onLunchRecipeData){
-                    item ->  horizontalScrollableCards(recipes = item)
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+                    modifier = Modifier.fillMaxWidth()
+
+                ) {
+                    items(recipeUiState.onLunchRecipeData) { item ->
+                        horizontalScrollableCards(recipes = item, recipeUiState.isLoading)
+                    }
                 }
             }
-
-
-
         }
 
 
-}
-
-/*@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun favouriteScreen ()
-{
-
-
-    val color1 = Color(0xFFCCCCCC)
-    val color2 = Color(0xDCDCDCDC)
-
-    //  val searchModel = viewModel.searchModel.collectAsState()
-    var res: String = ""
-    val cornerDegree = 50
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        color1,
-                        color2
-                    )
-
-                )
-            )
-    )
-    {
-
-        OutlinedTextField(value = "", onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .padding(16.dp)
-                .shadow(5.dp, RoundedCornerShape(30.dp))
-                .background(Color(0XF2F3F5), shape = RoundedCornerShape(30.dp)),
-            placeholder = {
-                Text(
-                    text = "Search here",
-                    modifier = Modifier.alpha(12f),
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = Color.Black,
-                textColor = Color.Black,
-                focusedIndicatorColor = Color.Black,
-                unfocusedIndicatorColor = Color.Cyan,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(30.dp),
-            leadingIcon = {
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.alpha(12f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search, contentDescription = "Search icon",
-                        tint = Color(0xFF5AA2B8)
-                    )
-                }
-            }
-
-        )
-        horizontalScrollableCards()
-        searchFilter()
-
-    }
-
-
-}
-
- */
-
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-
-@Composable
-fun shopListScreen ()
-{
-
-
-
-
-    val color1 = Color(0xFFB5D5B6)
-    val color2 = Color(0xDCF5F5F5)
-
-    //  val searchModel = viewModel.searchModel.collectAsState()
-    var res: String = ""
-    val cornerDegree = 50
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        color1,
-                        color2
-                    )
-
-                )
-
-            )
-    )
-    {
-
-        OutlinedTextField(value = "", onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .padding(16.dp)
-                .shadow(5.dp, RoundedCornerShape(30.dp))
-                .background(Color(0XF2F3F5), shape = RoundedCornerShape(30.dp)),
-            placeholder = {
-                Text(
-                    text = "Search here",
-                    modifier = Modifier.alpha(12f),
-                    color = Color.Gray,
-                    fontSize = 14.sp
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = Color.Black,
-                textColor = Color.Black,
-                focusedIndicatorColor = colorResource(id = R.color.food_green),
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(30.dp),
-            leadingIcon = {
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.alpha(12f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search, contentDescription = "Search icon",
-                        tint = colorResource(id = R.color.food_green)
-                    )
-                }
-            }
-
-        )
-
-    }
-
-
-}
-*/
-
-/*@Composable
-fun profileScreen(){
-}
-
- */
-
-/*
-@Composable
-fun pantryScreen(){
-}
-
- */
 
 
 @Composable
-fun horizontalScrollableCards(recipes: Meal) {
+fun horizontalScrollableCards(recipes: Meal, isDataLoaded : Boolean) {
+
 
             Card(
                 elevation = CardDefaults.cardElevation(

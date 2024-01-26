@@ -1,5 +1,6 @@
 package com.example.intojetpackcompose
 
+import BottomNavigationBarView
 import android.R.attr.bottom
 import android.R.attr.clipToOutline
 import android.R.attr.padding
@@ -102,11 +103,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.intojetpackcompose.UI.Constants
 import com.example.intojetpackcompose.ViewModel.FirstAccessViewModel
 import com.example.intojetpackcompose.ViewModel.SearchViewModel
+import com.example.intojetpackcompose.network.RetrofitService.ApiService
 import com.example.intojetpackcompose.network.RetrofitService.RecipeService
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
 import com.google.gson.GsonBuilder
+import dagger.hilt.android.AndroidEntryPoint
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
@@ -118,25 +123,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.nio.file.WatchEvent
+import kotlin.text.Typography.dagger
 import androidx.compose.ui.graphics.LinearGradient as LinearGradient
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-                //BottomNavigationBarView()
-
+            BottomNavigationBarView()
             }
-
         }
-
-
     }
-
     @Composable
     fun showTextOnScreen(result : String) {
         Text(

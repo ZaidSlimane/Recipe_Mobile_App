@@ -15,7 +15,10 @@ class RecipeDTO(
     @SerializedName("cooking_instructions") var cooking_instructions: String?,
     @SerializedName("ingredients") var ingredients: List<String>?,
     @SerializedName("date_added") var date_added: String?,
-    @SerializedName("date_updated") var date_updated: String?
+    @SerializedName("date_updated") var date_updated: String?,
+    @SerializedName("long_date_added") var long_date_added: String?,
+    @SerializedName("long_date_updated") var long_date_updated: String?
+
 
 )
 

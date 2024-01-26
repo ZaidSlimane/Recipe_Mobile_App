@@ -3,6 +3,6 @@ import com.example.intojetpackcompose.domain.model.Meal
 
 data class MainSceenState(
     var onLunchRecipeData: List<Meal> = emptyList(),
-    var isLoading: Boolean = false,
+    var isLoading: Boolean = true,
     var error : String = ""
 )

@@ -1,19 +1,23 @@
 package com.example.intojetpackcompose.network.RetrofitService
 
 import com.google.gson.GsonBuilder
+import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
+
 
 object ApiService {
 
-    val service = Retrofit.Builder()
+    val retrofitService = Retrofit.Builder()
         .baseUrl("https://food2fork.ca/api/")
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()
-        .create(RecipeService::class.java)
+
+    val recipeSevice = retrofitService.create(RecipeService::class.java)
 
     suspend fun getRecipeData (token: String, id: Int){
-        service.get(token, id)
+        recipeSevice.get(token, id)
     }
 
 

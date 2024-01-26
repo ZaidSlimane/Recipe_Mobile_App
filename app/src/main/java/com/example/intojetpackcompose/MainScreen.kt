@@ -99,19 +99,14 @@ fun CustomOutlinedTextField(
 fun BottomNavigationBarView() {
 
     val navController = rememberNavController()
-
-
-
     Scaffold(
         bottomBar = { BottomNavigationView(navController) },
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
                 Navigation(navController = navController)
             }
-
         },
         // Set background color to avoid the white flashing when you switch between screens
-
     )
 
 }

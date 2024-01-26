@@ -1,21 +1,37 @@
 package com.example.intojetpackcompose.Repository
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import coil.map.Mapper
+import com.example.intojetpackcompose.BottomNavigationBar
 import com.example.intojetpackcompose.UI.Constants.TOKEN
 import com.example.intojetpackcompose.UI.MainSceenState
 import com.example.intojetpackcompose.domain.model.Meal
 import com.example.intojetpackcompose.network.Response.RecipeSearchResponse
 import com.example.intojetpackcompose.network.RetrofitService.ApiService
+import com.example.intojetpackcompose.network.RetrofitService.RecipeService
 import com.example.intojetpackcompose.network.mdoel.RecipeDTO
 import com.example.intojetpackcompose.network.mdoel.RecipeDtoMapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.create
+import javax.inject.Inject
 import kotlin.random.Random
 
-class RecipeRepositoryImpl(val apiService : ApiService,
-    val dtoMapper: RecipeDtoMapper) : RecipeRepository {
+class RecipeRepositoryImpl
+@Inject constructor(
+    private val apiService : RecipeService,
+    private val dtoMapper: RecipeDtoMapper) : RecipeRepository {
+    val fetchedRecipeDtoList : ArrayList<Meal>
 
-    lateinit var fetchedRecipeDtoList : ArrayList<RecipeDTO>
+    init {
+        fetchedRecipeDtoList = ArrayList<Meal>()
+    }
+
+
     override suspend fun getRecipeWithQuery(
         authorizationCode: String,
         page: String,
@@ -29,32 +45,39 @@ class RecipeRepositoryImpl(val apiService : ApiService,
         var previouId = 0
         try {
             for (recipeIdIterrator in 0..5) {
+                Log.d("Debug", "executed?1")
                 currentId = getRandomRecipeId()
-                if (!currentId.equals(previouId))
-                    fetchRecipeDataRandomly(id = currentId)?.let {
+                if (!currentId.equals(previouId)) {
+                    Log.d("Debug", "executed?2")
+
+                    fetchRecipeDataRandomly(id=currentId)?.let {
                         fetchedRecipeDtoList.add(it)
                     }
+                }
                 previouId = currentId
             }
         }
         catch (e:Exception){
+            Log.d("exception", "check1:${e.message}")
         }
-        return dtoMapper.fromDtoList(fetchedRecipeDtoList)
+        return fetchedRecipeDtoList
     }
 
 
 
+    @SuppressLint("SuspiciousIndentation")
     private suspend fun fetchRecipeDataRandomly(token: String = TOKEN,
-                                                id: Int) : RecipeDTO? {
-        val resultOfFetching : RecipeDTO? = null
-
+                                                id: Int) : Meal {
+        lateinit var resultOfFetching : RecipeDTO
             try {
-                val resultOfFetching = apiService.getRecipeData(token, id)
+                Log.d("Debug", "executed?3")
+                resultOfFetching = apiService.get(token,id=id)
+                Log.d("try", "${resultOfFetching.title}")
             } catch (e: Exception) {
+                Log.d("exception", "check2: ${e.message}")
 
             }
-
-        return resultOfFetching
+        return dtoMapper.mapToDomainModel(resultOfFetching)
     }
 
     private fun  getRandomRecipeId(): Int{
